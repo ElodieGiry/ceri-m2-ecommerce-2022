@@ -1,4 +1,3 @@
-Union==version
-FastAPI==
-sqlite3==
-pytest==
+typing==4.3.0
+fastapi==0.85.1
+pytest==7.1.3
