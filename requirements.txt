@@ -1,0 +1,4 @@
+Union==version
+FastAPI==
+sqlite3==
+pytest==
