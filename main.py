@@ -1,11 +1,11 @@
 from typing import Union
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
+import numpy as np
 
 
-
-# faire tests avec pytest
 
 connectionDatabase = sqlite3.connect('vinyles.db', check_same_thread=False)
 cursorDatabase = connectionDatabase.cursor()
@@ -18,15 +18,23 @@ def getEverything():
     AllItems=[]
     connectionDatabase = sqlite3.connect('vinyles.db', check_same_thread=False)
     cursorDatabase = connectionDatabase.cursor()
-    cursorDatabase.execute(f"SELECT Artiste.Nom, Album.NomAlbum, Album.Image, Chanson.Titre FROM Artiste inner join Album on Nom=Album.Artiste inner join Chanson on Chanson.Album=Album.NomAlbum ORDER BY Artiste.Nom, NomAlbum ")
-    
+    cursorDatabase.execute("SELECT COUNT(*) FROM Chanson")
+    cursorDatabase.execute(f"SELECT Artiste.Nom, Album.NomAlbum, Album.Image, Chanson.Titre FROM Artiste inner join Album on Nom=Album.Artiste inner join Chanson on Chanson.Album=Album.NomAlbum GROUP BY Chanson.Titre ORDER BY Artiste.Nom, NomAlbum") #ORDER BY Artiste.Nom, NomAlbum,
+
     for row in cursorDatabase:
         AllItems.append(row[0])
         AllItems.append(row[1])
         AllItems.append(row[2])
         AllItems.append(row[3])
-    print(AllItems)
-    return AllItems
+    Everything=np.zeros((int(len(AllItems)/4),4), dtype=object)
+    for i in range(0,int(len(AllItems)/4)):
+        Everything[i][0]=AllItems[i*4]
+        Everything[i][1]=AllItems[i*4+1]
+        Everything[i][2]=AllItems[i*4+2]
+        Everything[i][3]=AllItems[i*4+3]
+    # print(Everything)
+    # return AllItems
+    return Everything.tolist()
 
 
 def getAlbumByArtist(nomArtiste):
@@ -40,7 +48,12 @@ def getAlbumByArtist(nomArtiste):
         Albums.append(row[0])
         Albums.append(row[1])
     # print(Albums)
-    return Albums
+    # return Albums
+    ListeAlbums=np.zeros((int(len(Albums)/2),2), dtype=object)
+    for i in range(0,int(len(Albums)/2)):
+        ListeAlbums[i][0]=Albums[i*2]
+        ListeAlbums[i][1]=Albums[i*2+1]
+    return ListeAlbums.tolist()
 
 def getMusicsByArtist(nomArtiste, nomAlbum):
     Musiques=[]
@@ -57,9 +70,25 @@ def getMusicsByArtist(nomArtiste, nomAlbum):
 
 app = FastAPI()
 
+
+origins = [
+    "http://localhost:4200",
+    "localhost:4200"
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
+
 @app.get("/")
 def read_root():
     return {"Item": getEverything()}
+    
 
 
 @app.get("/{nom_artiste}")
@@ -67,6 +96,8 @@ def read_item(nom_artiste: str):
     print("---------------------------------------------------------------")
     print(type(nom_artiste))
     return {"Artiste": nom_artiste, 'Albums': getAlbumByArtist(nom_artiste)}
+
+
 
 
 @app.get("/{nom_artiste}/{nom_album}")
