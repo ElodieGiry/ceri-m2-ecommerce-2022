@@ -4,64 +4,61 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import numpy as np
+import psycopg2
 
+connection = psycopg2.connect("dbname=Ecommerce user=ceri-commerce password=Elodie host=34.77.160.150 port=5432")
+cursorDatabase = connection.cursor()
+# nbAlbums=0
+# for row in cursorDatabase:
+#     nbAlbums+=row[0]
+# print(nbAlbums)
 
-
-connectionDatabase = sqlite3.connect('vinyles.db', check_same_thread=False)
-cursorDatabase = connectionDatabase.cursor()
-cursorDatabase.execute("SELECT COUNT(*) FROM Artiste")
-nbAlbums=0
-for row in cursorDatabase:
-    nbAlbums+=row[0]
 
 def getEverything():
     AllItems=[]
-    connectionDatabase = sqlite3.connect('vinyles.db', check_same_thread=False)
-    cursorDatabase = connectionDatabase.cursor()
-    cursorDatabase.execute("SELECT COUNT(*) FROM Chanson")
-    cursorDatabase.execute(f"SELECT Artiste.Nom, Album.NomAlbum, Album.Image, Chanson.Titre FROM Artiste inner join Album on Nom=Album.Artiste inner join Chanson on Chanson.Album=Album.NomAlbum GROUP BY Chanson.Titre ORDER BY Artiste.Nom, NomAlbum") #ORDER BY Artiste.Nom, NomAlbum,
 
+    # query=f'SELECT "nomAlbum", "nomArtiste" FROM public."Album" NATURAL JOIN public."Artiste" WHERE "nomArtiste" = \'{"Smash Into Pieces"}\''
+    query = f'SELECT "nomAlbum", "nomArtiste", "imageAlbum", "prixAlbum", "quantiteStockAlbum" FROM public."Album" NATURAL JOIN public."Artiste" ORDER BY "nomArtiste", "nomAlbum" ASC'
+    cursorDatabase.execute(query)
     for row in cursorDatabase:
         AllItems.append(row[0])
         AllItems.append(row[1])
         AllItems.append(row[2])
         AllItems.append(row[3])
-    Everything=np.zeros((int(len(AllItems)/4),4), dtype=object)
-    for i in range(0,int(len(AllItems)/4)):
-        Everything[i][0]=AllItems[i*4]
-        Everything[i][1]=AllItems[i*4+1]
-        Everything[i][2]=AllItems[i*4+2]
-        Everything[i][3]=AllItems[i*4+3]
-    # print(Everything)
-    # return AllItems
+        AllItems.append(row[4])
+    print(AllItems)
+
+
+    Everything=np.zeros((int(len(AllItems)/5),5), dtype=object)
+    for i in range(0,int(len(AllItems)/5)):
+        for j in range(0,int(len(AllItems)/5)+2):
+            Everything[i,j]=AllItems[(i*5)+j]
+
+    print(Everything)
     return Everything.tolist()
 
 
 def getAlbumByArtist(nomArtiste):
     Albums=[]
-    connectionDatabase = sqlite3.connect('vinyles.db', check_same_thread=False)
-    cursorDatabase = connectionDatabase.cursor()
-    # print(f"SELECT Album, Image FROM Artiste inner join Album on Nom=Artiste WHERE Nom ='{nomArtiste}'")
-    cursorDatabase.execute(f"SELECT NomAlbum, Image FROM Artiste inner join Album on Nom=Artiste WHERE Nom ='{nomArtiste}' GROUP BY NomAlbum")
-    
+    query=f'SELECT "nomAlbum", "imageAlbum", "prixAlbum", "quantiteStockAlbum" FROM public."Artiste" NATURAL JOIN public."Album" WHERE "nomArtiste" =\'{nomArtiste}\'   GROUP BY "nomAlbum","imageAlbum","prixAlbum","quantiteStockAlbum" ORDER BY "nomAlbum" ASC'
+    cursorDatabase.execute(query)
+
     for row in cursorDatabase:
         Albums.append(row[0])
         Albums.append(row[1])
-    # print(Albums)
-    # return Albums
-    ListeAlbums=np.zeros((int(len(Albums)/2),2), dtype=object)
-    for i in range(0,int(len(Albums)/2)):
-        ListeAlbums[i][0]=Albums[i*2]
-        ListeAlbums[i][1]=Albums[i*2+1]
+        Albums.append(row[2])
+        Albums.append(row[3])
+    ListeAlbums=np.zeros((int(len(Albums)/4),4), dtype=object)
+    for i in range(0,int(len(Albums)/4)):
+        for j in range(0,int(len(Albums)/4)+2):
+            ListeAlbums[i,j]=Albums[(i*4)+j]
+
     return ListeAlbums.tolist()
 
 def getMusicsByArtist(nomArtiste, nomAlbum):
     Musiques=[]
-    connectionDatabase = sqlite3.connect('vinyles.db', check_same_thread=False)
-    cursorDatabase = connectionDatabase.cursor()
-    # print(f"SELECT Titre FROM Chanson inner join Artiste on Chanson.Artiste=Artiste.nom WHERE Nom ='{nomArtiste}' AND Artiste.Album = '{nomAlbum}' AND Chanson.Album = '{nomAlbum}'")
-    cursorDatabase.execute(f"SELECT Titre FROM Chanson inner join Album on Chanson.Album=NomAlbum inner join Artiste on Album.Artiste=Artiste.nom WHERE Nom ='{nomArtiste}' AND Artiste.Album = '{nomAlbum}' AND Chanson.Album = '{nomAlbum}'")
-    
+    query=f'SELECT "nomChanson" FROM public."Chanson" NATURAL JOIN public."Album" NATURAL JOIN public."Artiste" WHERE "nomArtiste" =\'{nomArtiste}\' AND "nomAlbum" =\'{nomAlbum}\''
+    cursorDatabase.execute(query)
     for row in cursorDatabase:
         Musiques.append(row[0])
     print(Musiques)
