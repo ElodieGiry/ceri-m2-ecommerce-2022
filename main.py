@@ -7,12 +7,20 @@ import numpy as np
 import psycopg2
 
 connection = psycopg2.connect("dbname=Ecommerce user=ceri-commerce password=Elodie host=34.77.160.150 port=5432")
+# connection = psycopg2.connect("dbname=Vinyles user=ceri-commerce password=Elodie host=34.77.160.150 port=5432")
+
 cursorDatabase = connection.cursor()
 # nbAlbums=0
 # for row in cursorDatabase:
 #     nbAlbums+=row[0]
 # print(nbAlbums)
 
+query=f'SELECT COUNT(*) FROM public."Album"'
+cursorDatabase.execute(query)
+nbAlbums=0
+for row in cursorDatabase:
+    nbAlbums+=row[0]
+print(nbAlbums+2)
 
 def getEverything():
     AllItems=[]
@@ -27,12 +35,17 @@ def getEverything():
         AllItems.append(row[3])
         AllItems.append(row[4])
     print(AllItems)
-
+    print(len(AllItems))
 
     Everything=np.zeros((int(len(AllItems)/5),5), dtype=object)
     for i in range(0,int(len(AllItems)/5)):
-        for j in range(0,int(len(AllItems)/5)+2):
+        for j in range(0,int(len(AllItems)/(nbAlbums+2))+2):
             Everything[i,j]=AllItems[(i*5)+j]
+
+    # Everything=np.zeros((int(len(AllItems)/6),6), dtype=object)
+    # for i in range(0,int(len(AllItems)/6)):
+    #     for j in range(0,int(len(AllItems)/6)+2):
+    #         Everything[i,j]=AllItems[(i*6)+j]
 
     print(Everything)
     return Everything.tolist()
