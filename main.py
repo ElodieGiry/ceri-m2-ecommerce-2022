@@ -53,7 +53,7 @@ def getEverything():
 
 def getAlbumByArtist(nomArtiste):
     Albums=[]
-    query=f'SELECT "nomAlbum", "imageAlbum", "prixAlbum", "quantiteStockAlbum" FROM public."Artiste" NATURAL JOIN public."Album" WHERE "nomArtiste" =\'{nomArtiste}\'   GROUP BY "nomAlbum","imageAlbum","prixAlbum","quantiteStockAlbum" ORDER BY "nomAlbum" ASC'
+    query=f'SELECT "nomAlbum", "imageAlbum", "prixAlbum", "quantiteStockAlbum" FROM public."Artiste" NATURAL JOIN public."Album" WHERE LOWER("nomArtiste") = LOWER(\'{nomArtiste}\')   GROUP BY "nomAlbum","imageAlbum","prixAlbum","quantiteStockAlbum" ORDER BY "nomAlbum" ASC'
     cursorDatabase.execute(query)
 
     for row in cursorDatabase:
@@ -70,7 +70,7 @@ def getAlbumByArtist(nomArtiste):
 
 def getMusicsByArtist(nomArtiste, nomAlbum):
     Musiques=[]
-    query=f'SELECT "nomChanson" FROM public."Chanson" NATURAL JOIN public."Album" NATURAL JOIN public."Artiste" WHERE "nomArtiste" =\'{nomArtiste}\' AND "nomAlbum" =\'{nomAlbum}\''
+    query=f'SELECT "nomChanson" FROM public."Chanson" NATURAL JOIN public."Album" NATURAL JOIN public."Artiste" WHERE LOWER("nomArtiste") = LOWER(\'{nomArtiste}\') AND LOWER("nomAlbum") = LOWER(\'{nomAlbum}\') ORDER BY "nomChanson"'
     cursorDatabase.execute(query)
     for row in cursorDatabase:
         Musiques.append(row[0])
