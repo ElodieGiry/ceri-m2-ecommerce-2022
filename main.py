@@ -2,15 +2,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import mysql.connector
+import mariadb
 
-DATABASE_USERNAME="ceri-commerce"
-DATABASE_PASSWORD="Elodie"
-DATABASE_HOST="localhost"
-DATABASE_PORT="3306"
-DATABASE_NAME="Vinyles"
+# DATABASE_USERNAME="ceri-commerce"
+# DATABASE_PASSWORD="Elodie"
+# DATABASE_HOST="localhost"
+# DATABASE_PORT="3306"
+# DATABASE_NAME="Vinyles"
 
 
-connection = mysql.connector.connect(user=DATABASE_USERNAME, password=DATABASE_PASSWORD, database=DATABASE_NAME)
+connection = mariadb.connect(user='289758', password='BddEcommerce2022', database='ceri-ecommerce_bdd', host='mysql-ceri-ecommerce.alwaysdata.net', port=3306)
 cursorDatabase = connection.cursor()
 
 
