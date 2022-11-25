@@ -3,18 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 import mysql.connector
 import mariadb
+import identifiantsbdd
+import connexion
+import commande
 
-# DATABASE_USERNAME="ceri-commerce"
-# DATABASE_PASSWORD="Elodie"
-# DATABASE_HOST="localhost"
-# DATABASE_PORT="3306"
-# DATABASE_NAME="Vinyles"
-
-
-connection = mariadb.connect(user='289758', password='BddEcommerce2022', database='ceri-ecommerce_bdd', host='mysql-ceri-ecommerce.alwaysdata.net', port=3306)
+connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 cursorDatabase = connection.cursor()
-
-
 
 
 query=f'SELECT * FROM `album`'
@@ -97,6 +91,7 @@ def getMusicsByArtist(nomArtiste, nomAlbum):
     return Musiques
 
 def getAlbumImage(nomArtiste, nomAlbum):
+    imageAlbum=""
     cursorDatabase = connection.cursor()
     query=f'SELECT imageAlbum FROM album NATURAL JOIN artiste WHERE LOWER(nomArtiste) = LOWER(\'{nomArtiste}\') AND LOWER(nomAlbum) = LOWER(\'{nomAlbum}\')'
     cursorDatabase.execute(query)
@@ -106,6 +101,7 @@ def getAlbumImage(nomArtiste, nomAlbum):
     return imageAlbum
 
 def getAlbumPrice(nomArtiste, nomAlbum):
+    prixAlbum=""
     cursorDatabase = connection.cursor()
     query=f'SELECT prixAlbum FROM album NATURAL JOIN artiste WHERE LOWER(nomArtiste) = LOWER(\'{nomArtiste}\') AND LOWER(nomAlbum) = LOWER(\'{nomAlbum}\')'
     cursorDatabase.execute(query)
@@ -139,6 +135,11 @@ def read_root():
 @app.get("/artistes")
 def read_item():
     return {"Artistes": getArtists()}
+    
+@app.get("/commande")
+def read_item(email : str):
+    print("---------------------------------------------------------------")
+    return {"Email": email, 'Commande': commande.verificationCommande(email)}
 
 @app.get("/{nom_artiste}")
 def read_item(nom_artiste: str):
@@ -149,4 +150,5 @@ def read_item(nom_artiste: str):
 @app.get("/{nom_artiste}/{nom_album}")
 def read_item(nom_artiste: str, nom_album: str):
     print("---------------------------------------------------------------")
-    return {"Artiste": nom_artiste, 'Musiques': getMusicsByArtist(nom_artiste,nom_album), 'Image': getAlbumImage(nom_artiste,nom_album), 'Prix': getAlbumPrice(nom_artiste,nom_album)}    
+    return {"Artiste": nom_artiste, 'Musiques': getMusicsByArtist(nom_artiste,nom_album), 'Image': getAlbumImage(nom_artiste,nom_album), 'Prix': getAlbumPrice(nom_artiste,nom_album)}  
+
