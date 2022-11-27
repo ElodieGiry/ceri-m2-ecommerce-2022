@@ -8,6 +8,8 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { BodyComponent } from './body/body.component';
 import { DetailsComponent } from './details/details.component';
+import { ConnexionComponent } from './connexion/connexion.component';
+import { InscriptionComponent } from './inscription/inscription.component';
 
 
 @NgModule({
@@ -17,6 +19,8 @@ import { DetailsComponent } from './details/details.component';
     FooterComponent,
     BodyComponent,
     DetailsComponent,
+    ConnexionComponent,
+    InscriptionComponent,
     
   ],
   imports: [
