@@ -131,6 +131,13 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"Item": getEverything()}
+
+# route en post pour se connecter
+@app.post("/")
+def login(email: str, password: str):
+    print("---------------------------------------------------------------")
+    return {connexion.connexion(email, password)}
+
     
 @app.get("/artistes")
 def read_item():
