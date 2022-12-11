@@ -7,6 +7,7 @@ import { BodyComponent } from 'src/app/body/body.component';
 import { DetailsComponent } from 'src/app/details/details.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { InscriptionComponent } from './inscription/inscription.component';
+import { PanierComponent } from './panier/panier.component';
 const routes: Routes = [
   {path: "" , component : BodyComponent},
   {path: 'header' , component : HeaderComponent},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'details/:test/:testt' , component : DetailsComponent},
   {path: 'connexion' , component : ConnexionComponent},
   {path: 'inscription' , component : InscriptionComponent},
+  {path: 'panier' , component : PanierComponent},
 
 
 ];

@@ -10,6 +10,8 @@ import { BodyComponent } from './body/body.component';
 import { DetailsComponent } from './details/details.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { InscriptionComponent } from './inscription/inscription.component';
+import { PanierComponent } from './panier/panier.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 
 @NgModule({
@@ -21,13 +23,17 @@ import { InscriptionComponent } from './inscription/inscription.component';
     DetailsComponent,
     ConnexionComponent,
     InscriptionComponent,
+    PanierComponent,
+   
     
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RouterModule,
+    RouterModule, 
+    FormsModule,
+    ReactiveFormsModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
