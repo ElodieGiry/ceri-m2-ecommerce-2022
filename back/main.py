@@ -1,7 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import numpy as np
-import mysql.connector
 import mariadb
 import identifiantsbdd
 import connexion
@@ -33,13 +31,12 @@ def getEverything():
         AllItems.append(row[4])
     cursorDatabase.close()
 
-    Everything=np.zeros((int(len(AllItems)/5),5), dtype=object)
-    for i in range(0,int(len(AllItems)/5)): 
-        for j in range(0,int(len(AllItems)/(nbAlbums+2))+4): 
-            Everything[i,j]=AllItems[(i*5)+j]
-    return Everything.tolist()
-    # return AllItems
-
+    Everything= [0]*int(len(AllItems)/5)
+    for i in range(0,int(len(AllItems)/5)):
+        Everything[i]=[0]*5
+        for j in range(0,int(len(AllItems)/(nbAlbums+2))+4):
+            Everything[i][j]=AllItems[(i*5)+j]
+    return Everything
 
 def getArtists():
     cursorDatabase = connection.cursor()
@@ -69,15 +66,12 @@ def getAlbumByArtist(nomArtiste):
         Albums.append(row[3])
     cursorDatabase.close()
 
-    ListeAlbums=np.zeros((int(len(Albums)/4),4), dtype=object)
-    # print(int(len(Albums)/4))
+    ListeAlbums= [0]*int(len(Albums)/4)
     for i in range(0,int(len(Albums)/4)):
+        ListeAlbums[i]=[0]*4
         for j in range(0,int(len(Albums)/4)+2):
-            ListeAlbums[i,j]=Albums[(i*4)+j]
-
-    return ListeAlbums.tolist()
-
-
+            ListeAlbums[i][j]=Albums[(i*4)+j]
+    return ListeAlbums
 
 def getMusicsByArtist(nomArtiste, nomAlbum):
     cursorDatabase = connection.cursor()
@@ -113,7 +107,6 @@ def getAlbumPrice(nomArtiste, nomAlbum):
 
 app = FastAPI()
 
-
 origins = [
     "http://localhost:4200",
     "localhost:4200"
@@ -131,6 +124,17 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"Item": getEverything()}
+
+# route en post pour se connecter
+@app.post("/connexion")
+def login(email: str, password: str):
+    print("---------------------------------------------------------------")
+    return {connexion.connexion(email, password)}
+
+@app.post("/inscription")
+def inscription(nom:str, prenom:str, email:str, password:str, telephone:int, adresse:str, codePostal:int, ville:str, pays:str):
+    print("---------------------------------------------------------------")
+    return {connexion.inscription(nom, prenom, email, password, telephone, adresse, codePostal, ville, pays)}
     
 @app.get("/artistes")
 def read_item():
@@ -151,4 +155,3 @@ def read_item(nom_artiste: str):
 def read_item(nom_artiste: str, nom_album: str):
     print("---------------------------------------------------------------")
     return {"Artiste": nom_artiste, 'Musiques': getMusicsByArtist(nom_artiste,nom_album), 'Image': getAlbumImage(nom_artiste,nom_album), 'Prix': getAlbumPrice(nom_artiste,nom_album)}  
-
