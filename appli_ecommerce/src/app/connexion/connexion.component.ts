@@ -28,7 +28,9 @@ export class ConnexionComponent implements OnInit {
 
   
   connexion(formConnex:any){
-    this.connect.login(formConnex.form.value.email,formConnex.form.value.password).subscribe(
+    console.log("test connexion");
+    console.log("test mail", formConnex.form.value.email);
+    this.connect.login(formConnex.form.value.email, formConnex.form.value.password).subscribe(
     (data:any) =>{
         //this.email=formConnex.form.value.email;
         console.log("dans login");
