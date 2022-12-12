@@ -14,6 +14,7 @@ import { PanierComponent } from './panier/panier.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
