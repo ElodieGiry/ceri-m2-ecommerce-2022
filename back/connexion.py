@@ -3,6 +3,10 @@ import hashlib
 
 import identifiantsbdd
 
+import os
+
+p=os.system('start cloud-sql-proxy.exe --credentials-file "Cle GCP.json" ceri-m1-ecommerce-2022:europe-west1:mysql-primary')
+print(p)
 
 connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 cursorDatabase = connection.cursor()
@@ -29,6 +33,4 @@ def connexion(email, password):
         result=cursorDatabase.fetchall()
         return('Bonjour ' + result[0][0]+ ' ' + result[0][1])
     else:
-        return print('Erreur de connexion, le mail ou le mot de passe est incorrect')
-
-# print(connexion('jcvinyl@gmail.com','jcvinyl'))
+        return('Erreur de connexion, le mail ou le mot de passe est incorrect')
