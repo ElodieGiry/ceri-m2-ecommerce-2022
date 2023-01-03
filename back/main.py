@@ -1,9 +1,15 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Form, Query,APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import mariadb
 import identifiantsbdd
 import connexion
 import commande
+from enum import Enum
+from pydantic import BaseModel
+import subprocess
+from typing import Union
+import admin
+
 
 connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 cursorDatabase = connection.cursor()
@@ -105,8 +111,36 @@ def getAlbumPrice(nomArtiste, nomAlbum):
     return prixAlbum
 
 
+def panier(gestionPanier, nomArtiste, nomAlbum, quantite):
+    if gestionPanier and nomArtiste and nomAlbum and quantite:
+        if gestionPanier=="ajouter":
+            return {"L'album "+ nomAlbum+" de " + nomArtiste +" a été ajouté "+ str(quantite) +" fois au panier"}
+        elif gestionPanier=="supprimer":
+            return {"L'album "+ nomAlbum+" a été supprimé du panier"}
+
+
+class ItemConnexion(BaseModel):
+    email: str
+    password: str
+
+
+class ItemInscription(BaseModel):
+    nom: str
+    prenom: str
+    email: str
+    password: str
+    telephone: str
+    adresse: str
+    codePostal: str
+    ville: str
+    pays: str
+    
+
+
 app = FastAPI()
 
+router = APIRouter()
+app.include_router(router)
 origins = [
     "http://localhost:4200",
     "localhost:4200"
@@ -122,20 +156,20 @@ app.add_middleware(
 )
 
 @app.get("/")
-def read_root():
-    return {"Item": getEverything()}
+def read_root(gestion: str = None,nomArtiste: str = None, nomAlbum: str = None, quantite: int = None):
+    return {"Item": getEverything(), "Panier": panier(gestion, nomArtiste, nomAlbum, quantite)}
 
 # route en post pour se connecter
 @app.post("/connexion")
-def login(email: str, password: str):
+def login(item: ItemConnexion):
     print("---------------------------------------------------------------")
-    return {connexion.connexion(email, password)}
+    return {connexion.connexion(item.email, item.password)}
 
 @app.post("/inscription")
-def inscription(nom:str, prenom:str, email:str, password:str, telephone:int, adresse:str, codePostal:int, ville:str, pays:str):
+def inscription(item: ItemInscription):
     print("---------------------------------------------------------------")
-    return {connexion.inscription(nom, prenom, email, password, telephone, adresse, codePostal, ville, pays)}
-    
+    return {connexion.inscription(item.nom, item.prenom, item.email, item.password, item.telephone, item.adresse, item.codePostal, item.ville, item.pays)}
+
 @app.get("/artistes")
 def read_item():
     return {"Artistes": getArtists()}
@@ -144,6 +178,21 @@ def read_item():
 def read_item(email : str):
     print("---------------------------------------------------------------")
     return {"Email": email, 'Commande': commande.verificationCommande(email)}
+
+@app.get("/admin")
+def read_item(idCommande: int = None, etat: str = None):
+    print("---------------------------------------------------------------")
+    if idCommande == None or etat == None:
+        return {"Commandes": admin.recupererCommandes()}
+    return {"Commande modifiée ": admin.modifierCommande(idCommande, etat),"Commandes": admin.recupererCommandes()}
+
+# @app.get("/panier")
+# def read_item(panier : Union[str, None] = Query(default=None, min_length=3, max_length=50)):
+#     print("---------------------------------------------------------------")
+#     if panier == "ajouter":
+#         return {"Message": "Ajouté au panier"}
+#     return {"Message": "Article supprimé du panier"}
+
 
 @app.get("/{nom_artiste}")
 def read_item(nom_artiste: str):
