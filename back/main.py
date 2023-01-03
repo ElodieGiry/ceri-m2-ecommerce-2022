@@ -4,9 +4,7 @@ import mariadb
 import identifiantsbdd
 import connexion
 import commande
-from enum import Enum
 from pydantic import BaseModel
-import subprocess
 from typing import Union
 import admin
 
@@ -129,9 +127,9 @@ class ItemInscription(BaseModel):
     prenom: str
     email: str
     password: str
-    telephone: str
+    telephone: int
     adresse: str
-    codePostal: str
+    codePostal: int
     ville: str
     pays: str
     
@@ -186,12 +184,23 @@ def read_item(idCommande: int = None, etat: str = None):
         return {"Commandes": admin.recupererCommandes()}
     return {"Commande modifiée ": admin.modifierCommande(idCommande, etat),"Commandes": admin.recupererCommandes()}
 
-# @app.get("/panier")
-# def read_item(panier : Union[str, None] = Query(default=None, min_length=3, max_length=50)):
-#     print("---------------------------------------------------------------")
-#     if panier == "ajouter":
-#         return {"Message": "Ajouté au panier"}
-#     return {"Message": "Article supprimé du panier"}
+@app.get("/ajouter")
+def read_item(a_ajouter: str = None, nomNouvelArtiste: str = None, nomArtiste: str = None, prixAlbum: float = None, quantite: int = None, anneeAlbum: str = None, typeAlbum: str = None, nomAlbum: str = None, imageAlbum: str = None, idAlbumChanson: int = None, nomChanson: str = None ):
+    print("---------------------------------------------------------------")
+    if a_ajouter == "Artiste":
+        if nomNouvelArtiste != None:
+            return {"Message": admin.ajouterArtiste(nomNouvelArtiste)}
+        return {"Message": "Nom de l'artiste non renseigné"}
+    elif a_ajouter == "Album":
+        if nomArtiste != None and prixAlbum != None and quantite != None and anneeAlbum != None and typeAlbum != None and nomAlbum != None and imageAlbum != None:
+            return {"Message": admin.ajouterAlbum(nomArtiste, prixAlbum, quantite, anneeAlbum, typeAlbum, nomAlbum, imageAlbum)}
+        return {"Message": "Tous les champs ne sont pas renseignés"}
+    elif a_ajouter == "Chanson":
+        if idAlbumChanson != None and nomChanson != None:
+            return {"Message": admin.ajouterChanson(idAlbumChanson, nomChanson)}
+        return {"Message": "Tous les champs ne sont pas renseignés"}
+    else : 
+        return {"Message": "Aucune action n'a été renseignée"}
 
 
 @app.get("/{nom_artiste}")

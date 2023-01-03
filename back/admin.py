@@ -32,3 +32,25 @@ def modifierCommande(idCommande, etatCommande):
     cursorDatabase.execute(query)
     connection.commit()
     return ('La commande a bien été modifiée')
+
+def ajouterAlbum(nomArtiste, prixAlbum, quantiteStockAlbum, anneeAlbum, typeAlbum, nomAlbum, imageAlbum):
+    query=f'SELECT idArtiste FROM `artiste` WHERE nomArtiste="{nomArtiste}"'
+    cursorDatabase.execute(query)
+    result=cursorDatabase.fetchall()
+
+    query=f'INSERT INTO `album` (idArtiste, prixAlbum, quantiteStockAlbum, anneeAlbum, typeAlbum, nomAlbum, imageAlbum) VALUES ("{result}","{prixAlbum}","{quantiteStockAlbum}","{anneeAlbum}","{typeAlbum}","{nomAlbum}","{imageAlbum}")'
+    cursorDatabase.execute(query)
+    connection.commit()
+    return ('L\'album a bien été ajouté')
+
+def ajouterArtiste(nomArtiste):
+    query=f'INSERT INTO `artiste` (nomArtiste) VALUES ("{nomArtiste}")'
+    cursorDatabase.execute(query)
+    connection.commit()
+    return ('L\'artiste a bien été ajouté')
+
+def ajouterChanson(idAlbum, nomChanson):
+    query=f'INSERT INTO `chanson` (idAlbum, nomChanson) VALUES ("{idAlbum}","{nomChanson}")'
+    cursorDatabase.execute(query)
+    connection.commit()
+    return ('La chanson a bien été ajoutée')
