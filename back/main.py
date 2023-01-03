@@ -8,6 +8,7 @@ from enum import Enum
 from pydantic import BaseModel
 import subprocess
 from typing import Union
+import admin
 
 
 connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
@@ -164,20 +165,10 @@ def login(item: ItemConnexion):
     print("---------------------------------------------------------------")
     return {connexion.connexion(item.email, item.password)}
 
-# @app.post("/connexion")
-# def login(email: str = Form(), password: str = Form()):
-#     print("---------------------------------------------------------------")
-#     return {connexion.connexion(email, password)}
-
 @app.post("/inscription")
 def inscription(item: ItemInscription):
     print("---------------------------------------------------------------")
     return {connexion.inscription(item.nom, item.prenom, item.email, item.password, item.telephone, item.adresse, item.codePostal, item.ville, item.pays)}
-
-# @app.post("/inscription")
-# def inscription(nom: str = Form(), prenom: str = Form(), email: str = Form(), password: str = Form(), telephone: str = Form(), adresse: str = Form(), codePostal: str = Form(), ville: str = Form(), pays: str = Form()):
-#     print("---------------------------------------------------------------")
-#     return {connexion.inscription(nom, prenom, email, password, telephone, adresse, codePostal, ville, pays)}
 
 @app.get("/artistes")
 def read_item():
@@ -187,6 +178,13 @@ def read_item():
 def read_item(email : str):
     print("---------------------------------------------------------------")
     return {"Email": email, 'Commande': commande.verificationCommande(email)}
+
+@app.get("/admin")
+def read_item(idCommande: int = None, etat: str = None):
+    print("---------------------------------------------------------------")
+    if idCommande == None or etat == None:
+        return {"Commandes": admin.recupererCommandes()}
+    return {"Commande modifiée ": admin.modifierCommande(idCommande, etat),"Commandes": admin.recupererCommandes()}
 
 # @app.get("/panier")
 # def read_item(panier : Union[str, None] = Query(default=None, min_length=3, max_length=50)):

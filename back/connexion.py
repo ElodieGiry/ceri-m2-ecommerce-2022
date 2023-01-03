@@ -5,8 +5,8 @@ import identifiantsbdd
 
 import os
 
-p=os.system('start cloud-sql-proxy.exe --credentials-file "Cle GCP.json" ceri-m1-ecommerce-2022:europe-west1:mysql-primary')
-print(p)
+# p=os.system('start cloud-sql-proxy.exe --credentials-file "Cle GCP.json" ceri-m1-ecommerce-2022:europe-west1:mysql-primary')
+# print(p)
 
 connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 cursorDatabase = connection.cursor()
