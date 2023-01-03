@@ -1,8 +1,20 @@
 import mariadb
 import numpy as np
 import identifiantsbdd
+import os
+from os.path import  join, dirname
+from dotenv import load_dotenv
 
-connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
+dotenv_path = join(dirname(__file__), 'identifiants.env')
+load_dotenv(dotenv_path)
+USER=os.environ.get("USER")
+PASSWORD=os.environ.get("PASSWORD")
+DBNAME=os.environ.get("DBNAME")
+HOST=os.environ.get("HOST")
+MYSQLPORT=os.environ.get("MYSQL_PORT")
+
+connection = mariadb.connect(user=USER, password=PASSWORD, database=DBNAME, host=HOST, port=int(MYSQLPORT))
+# connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 cursorDatabase = connection.cursor()
 
 def creationCommande(date,montant,etat,emailClient,telephoneClient,adresse,cp,ville,pays):
@@ -45,10 +57,3 @@ def verificationCommande(emailClient):
         # return Commande
     else:
         return ('Aucune commande n\'a été effectuée pour le moment')
-
-# creationCommande('2021-01-01', 20, 'En préparation', 'jcvinyl@gmail.com', '0123456789', '18 rue des cd', '84140', 'Montfavet', 'France')
-# creationCommande('2021-01-02', 10, 'En préparation', 'jcvinyl@gmail.com', '0123456789', '18 rue des cd', '84140', 'hrfuhfhu', 'France')
-# creationDetailCommande(2,1,1)
-# creationDetailCommande(1, 4, 1)
-# creationDetailCommande(1, 5, 1)
-# print(verificationCommande('jcvinyl@gmail.com'))
