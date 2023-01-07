@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        .bcontent {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container bcontent">
+        <h2>{{tesstt}}</h2>
+        <hr />
+        <div class="card" style="width: 100%;">
+            <div class="row no-gutters">
+                <div class="col" >
+                    <div >
+                    <img class="card-img" src="{{listeDetails.Image}}" alt="" style="width:70%; margin-left:20px;">
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="card-body">
+                        <h5 class="card-title">{{tesst}}</h5>
+                        
+                        <div *ngFor="let music of listeDetails.Musiques">
+                        <p class="card-text">{{music}}</p>
+                        </div>
+                        <br>
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent ">
+                            <div class="text-center "><button (click)="addToCart()"
+                                    class="btn btn-outline-dark mt-auto " data-bs-toggle="modal" data-bs-target="#myModal">Ajouter au panier</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    
+    <!-- The Modal -->
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+    
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Article ajouté !</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+    
+          <!-- Modal body -->
+          <div class="modal-body">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Voir mon panier</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Continuer mes achats</button>
+          </div>
+    
+          <!-- Modal footer -->
+         
+    
+        </div>
+     </div>
+    </div>
+    
+</body>
+</html>
