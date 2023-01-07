@@ -22,7 +22,7 @@ export class DetailsComponent implements OnInit {
   listeProod:any;
   image:any;
   prix:any;
-  quantite:number=0;
+  quantite=0;
 
   
   
@@ -70,30 +70,23 @@ export class DetailsComponent implements OnInit {
       );
 
 } 
-    addToCart(){
-      if(this.quantite==0){
-        this.quantite+=1;
-        this.liste.addProduit(this.nomAlbum,this.nomArtiste,this.prix,this.image,this.quantite)
-        console.log("ajouter",this.liste.listeProd);
-        localStorage.setItem('listeProd', JSON.stringify(this.liste.listeProd));
-        this.listeProod= localStorage.getItem('listeProd');
-      }
-      
-      else{
-        this.quantite+=1;
-        this.liste.removeProduit(this.nomAlbum)
-        console.log("j'ai supprimé")
-        console.log("je suis la")
-        this.liste.addProduit(this.nomAlbum,this.nomArtiste,this.prix,this.image,this.quantite)
-        
-      }
-      console.log("quantite",this.quantite);
+addToCart() {
+// Trouver le produit dans la liste
+  const productIndex = this.liste.listeProd.findIndex(p => p.albumName === this.nomAlbum && p.artisteName === this.nomArtiste);
+  if (productIndex >= 0) {
+    // Si le produit est déjà dans la liste, augmenter sa quantité
+    this.liste.listeProd[productIndex].quantite++;
+  } else {
+    // Si le produit n'est pas dans la liste, l'ajouter à la liste avec une quantité de 1
+    this.liste.addProduit(this.nomAlbum, this.nomArtiste, this.prix, this.image, 1);
+  }
+  localStorage.setItem('listeProd', JSON.stringify(this.liste.listeProd));
+  this.listeProod = localStorage.getItem('listeProd');
+  console.log("ajouter", this.liste.listeProd);
+}
 
 
 }
-
-  } 
-
 
   
 

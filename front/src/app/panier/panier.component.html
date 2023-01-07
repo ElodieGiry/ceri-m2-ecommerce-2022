@@ -1,223 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
-<center><h1>Valider votre commande</h1></center>
-<div class="container" >
-    <div class="row px-md-4 px-2 pt-4">
-        <div class="col-lg-8">
-            <p class="pb-2 fw-bold">Votre commande</p>
-            <div class="card">
-                <div>
-                    <div class="table-responsive px-md-4 px-2 pt-3">
-                        <table class="table table-borderless">
-                            <tbody>
-                              <tr class="border-bottom" *ngFor="let item of finalPanier">
-                                <td>
-                                  <div class="d-flex align-items-center">
-                                    <div><img src="{{item.image}}" alt="" style="width:50%;"></div>
-                                    <div class="ps-3 d-flex flex-column justify-content">
-                                      <p class="fw-bold">{{ item.albumName }}</p>
-                                      <p>quantiteeeeee{{item.quantite}}</p>   
+
+    <center>
+        <h1>Valider votre commande</h1>
+    </center>
+    <div class="container">
+        <div class="row px-md-4 px-2 pt-4">
+            <div class="col-lg-8">
+                <p class="pb-2 fw-bold">Votre commande</p>
+                <div class="card">
+                    <div>
+                        <div class="table-responsive px-md-4 px-2 pt-3">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr class="border-bottom" *ngFor="let item of finalPanier">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div><img src="{{item.image}}" alt="" style="width:50%;"></div>
+                                                <div class="ps-3 d-flex flex-column justify-content">
+                                                    <p class="fw-bold">{{ item.albumName }}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <p class="pe-3"><span class="red">{{ item.prix }}€</span></p>
+                                                <p class="text-muted text-decoration-line-through">{{getPrix(item)}}€
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center"> <span
+                                                    class="pe-3 text-muted">Quantité <td>{{ item.quantite }}</td></span> <span class="pe-3"> <input
+                                                        class="ps-2" type="number"></span>
+                                                <div class="fa fa-trash" type="button"
+                                                    (click)="deleteItem(item, $event)"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 payment-summary">
+                <p class="fw-bold pt-lg-0 pt-4 pb-2">Récapitulatif</p>
+                <div class="card px-md-3 px-2 pt-4">
+                    <div class="unregistered mb-4"> <span class="py-1">Paiement</span> </div>
+                    <div class="d-flex justify-content-between pb-3"> <small class="text-muted">Numéro de
+                            transaction</small>
+                        <p class="">VC115665</p>
+                    </div>
+                    <div class="d-flex justify-content-between b-bottom"> <input type="text" class="ps-2"
+                            placeholder="COUPON CODE">
+                        <div class="btn btn-primary">Appliquer</div>
+                    </div>
+                    <div class="d-flex flex-column b-bottom">
+                        <div class="d-flex justify-content-between py-3"> <small class="text-muted">Total</small>
+                            <p>{{calculerPrixTotal(finalPanier)}}€</p>
+                        </div>
+                        <div class="d-flex justify-content-between pb-3"> <small class="text-muted">Livraison</small>
+                            <p>{{ calculerPrixLivraison(calculerPrixTotal(finalPanier)) }}€</p>
+                        </div>
+                        <div class="d-flex justify-content-between"> <small class="text-muted">Total commande</small>
+                            <p>{{ calculerPrixTotalCommande(finalPanier) }}€</p>
+                        </div>
+                    </div>
+                    <div class="sale my-3"> <span>Votre<span class="px-1">panier</span><span>expire
+                                dans</span>:</span><span class="red">21<span class="ps-1">heures</span>,31<span
+                                class="ps-1 ">minutes</span></span> </div>
+                </div>
+            </div>
+            <div class="col-lg-8 delivery px-md-3 px-1">
+                <p class="pt-4 fw-bold pb-3 ps-2">Livraison</p>
+                <p><strong>Adresse de livraison : </strong> 30 Rue du CERI , 84000 AVIGNON</p>
+                <br>
+                <div class="d-md-flex justify-content-between align-items-center pb-4">
+                    <div class="size d-flex ps-4"> <label class="option d-flex align-items-center"> <input type="radio"
+                                name="radio">
+                            <div class="card">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-center"> <img class="del"
+                                            src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png"
+                                            alt="">
+                                        <p class="ps-2">DPD</p>
                                     </div>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div class="d-flex">
-                                    <p class="pe-3"><span class="red">{{ item.prix }}€</span></p>
-                                    <p class="text-muted text-decoration-line-through">{{ item.prix + 5 }}€</p>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div class="d-flex align-items-center"> <span class="pe-3 text-muted">Quantité</span> <span class="pe-3"> <input class="ps-2" type="number" ></span>
-                                    <div class="fa fa-trash" type="button"></div>
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                    </div>
+                                    <div class=" d-flex flex-column px-3">
+                                        <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small
+                                            class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small>
+                                        <small class="text-muted pb-1">Friday:28</small>
+                                    </div>
+                                    <p class="fw-bold">{{ calculerPrixLivraison(calculerPrixTotal(finalPanier)) }}€</p>
+                                </div>
+                            </div> <span class="checkmark"></span>
+                        </label> </div>
+                    <div class="size d-flex pt-md-0 pt-3 ps-md-0 ps-4"> <label class="option d-flex align-items-center">
+                            <input type="radio" name="radio">
+                            <div class="card">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-center"> <img class="del"
+                                            src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png"
+                                            alt="">
+                                        <p class="ps-2">DPD</p>
+                                    </div>
+                                    <div class=" d-flex flex-column px-3">
+                                        <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small
+                                            class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small>
+                                        <small class="text-muted pb-1">Friday:28</small>
+                                    </div>
+                                    <p class="fw-bold">{{ calculerPrixLivraison3(calculerPrixTotal(finalPanier)) }}€</p>
+                                </div>
+                            </div> <span class="checkmark"></span>
+                        </label> </div>
+                </div>
+                <div class="d-md-flex justify-content-between align-items-center pb-4">
+                    <div class="size d-flex ps-4"> <label class="option d-flex align-items-center"> <input type="radio"
+                                name="radio">
+                            <div class="card">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-center"> <img class="del"
+                                            src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png"
+                                            alt="">
+                                        <p class="ps-2">DPD</p>
+                                    </div>
+                                    <div class=" d-flex flex-column px-3">
+                                        <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small
+                                            class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small>
+                                        <small class="text-muted pb-1">Friday:28</small>
+                                    </div>
+                                    <p class="fw-bold">{{ calculerPrixLivraison2(calculerPrixTotal(finalPanier)) }}€</p>
+                                </div>
+                            </div> <span class="checkmark"></span>
+                        </label> </div>
+                    <div class="size d-flex pt-md-0 pt-3 ps-md-0 ps-4"> <label class="option d-flex align-items-center">
+                            <input type="radio" name="radio">
+                            <div class="card">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center justify-content-center"> <img class="del"
+                                            src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png"
+                                            alt="">
+                                        <p class="ps-2">DPD</p>
+                                    </div>
+                                    <div class=" d-flex flex-column px-3">
+                                        <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small
+                                            class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small>
+                                        <small class="text-muted pb-1">Friday:28</small>
+                                    </div>
+                                    <p class="fw-bold">{{ calculerPrixLivraison3(calculerPrixTotal(finalPanier)) }}€</p>
+                                </div>
+                            </div> <span class="checkmark"></span>
+                        </label> </div>
+
                 </div>
             </div>
-        </div>
-        <div class="col-lg-4 payment-summary">
-            <p class="fw-bold pt-lg-0 pt-4 pb-2">Récapitulatif</p>
-            <div class="card px-md-3 px-2 pt-4">
-                <div class="unregistered mb-4"> <span class="py-1">Paiement</span> </div>
-                <div class="d-flex justify-content-between pb-3"> <small class="text-muted">Numéro de transaction</small>
-                    <p class="">VC115665</p>
-                </div>
-                <div class="d-flex justify-content-between b-bottom"> <input type="text" class="ps-2" placeholder="COUPON CODE">
-                    <div class="btn btn-primary">Appliquer</div>
-                </div>
-                <div class="d-flex flex-column b-bottom">
-                    <div class="d-flex justify-content-between py-3"> <small class="text-muted">Total</small>
-                        <p>30€</p>
-                    </div>
-                    <div class="d-flex justify-content-between pb-3"> <small class="text-muted">Livraison</small>
-                        <p>5€</p>
-                    </div>
-                    <div class="d-flex justify-content-between"> <small class="text-muted">Total commande</small>
-                        <p>35€</p>
-                    </div>
-                </div>
-                <div class="sale my-3"> <span>Votre<span class="px-1">panier</span><span>expire dans</span>:</span><span class="red">21<span class="ps-1">heures</span>,31<span class="ps-1 ">minutes</span></span> </div>
-            </div>
-        </div>
-        <div class="col-lg-8 delivery px-md-3 px-1">
-            <p class="pt-4 fw-bold pb-3 ps-2">Livraison</p>
-            <p><strong>Adresse de livraison : </strong> 30 Rue du CERI , 84000 AVIGNON</p>
-            <br>
-            <div class="d-md-flex justify-content-between align-items-center pb-4">
-                <div class="size d-flex ps-4"> <label class="option d-flex align-items-center"> <input type="radio" name="radio">
-                        <div class="card">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center justify-content-center"> <img class="del" src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png" alt="">
-                                    <p class="ps-2">DPD</p>
-                                </div>
-                                <div class=" d-flex flex-column px-3">
-                                    <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small> <small class="text-muted pb-1">Friday:28</small>
-                                </div>
-                                <p class="fw-bold">$5.25</p>
-                            </div>
-                        </div> <span class="checkmark"></span>
-                    </label> </div>
-                <div class="size d-flex pt-md-0 pt-3 ps-md-0 ps-4"> <label class="option d-flex align-items-center"> <input type="radio" name="radio">
-                        <div class="card">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center justify-content-center"> <img class="del" src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png" alt="">
-                                    <p class="ps-2">DPD</p>
-                                </div>
-                                <div class=" d-flex flex-column px-3">
-                                    <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small> <small class="text-muted pb-1">Friday:28</small>
-                                </div>
-                                <p class="fw-bold">$5.25</p>
-                            </div>
-                        </div> <span class="checkmark"></span>
-                    </label> </div>
-            </div>
-            <div class="d-md-flex justify-content-between align-items-center pb-4">
-                <div class="size d-flex ps-4"> <label class="option d-flex align-items-center"> <input type="radio" name="radio">
-                        <div class="card">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center justify-content-center"> <img class="del" src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png" alt="">
-                                    <p class="ps-2">DPD</p>
-                                </div>
-                                <div class=" d-flex flex-column px-3">
-                                    <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small> <small class="text-muted pb-1">Friday:28</small>
-                                </div>
-                                <p class="fw-bold">$5.25</p>
-                            </div>
-                        </div> <span class="checkmark"></span>
-                    </label> </div>
-                <div class="size d-flex pt-md-0 pt-3 ps-md-0 ps-4"> <label class="option d-flex align-items-center"> <input type="radio" name="radio">
-                        <div class="card">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center justify-content-center"> <img class="del" src="https://www.freepnglogos.com/uploads/ups-logo-transparent/ups-airlines-aviation-22.png" alt="">
-                                    <p class="ps-2">DPD</p>
-                                </div>
-                                <div class=" d-flex flex-column px-3">
-                                    <p class="fw-bold pb-1">DPD<span>Deliveries</span></p> <small class="text-muted pb-1">Expected<span class="ps-1">delivery:</span></small> <small class="text-muted pb-1">Friday:28</small>
-                                </div>
-                                <p class="fw-bold">$5.25</p>
-                            </div>
-                        </div> <span class="checkmark"></span>
-                    </label> </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <p class="pt-4 fw-bold pb-3">Méthode de paiement</p>
-            <table>
-            <div class="card p-3 mb-2">
-                <div>
-                   
+            <div class="col-lg-4">
+                <p class="pt-4 fw-bold pb-3">Méthode de paiement</p>
+                <table>
+                    <div class="card p-3 mb-2">
                         <div>
-                        <tr>
-                            <td>
-                          <span>Paypal</span>
-                          </td>
-                       
-                         <td><img src="https://i.imgur.com/7kQEsHU.png" width="30" style="margin-left:42vh;"></td>
-                           </tr>
+
+                            <div>
+                                <tr>
+                                    <td>
+                                        <span>Paypal</span>
+                                    </td>
+
+                                    <td><img src="https://i.imgur.com/7kQEsHU.png" width="30" style="margin-left:42vh;">
+                                    </td>
+                                </tr>
+                            </div>
+                            <div>
+                                <tr>
+
+                                    <td>
+                                        <div class="card-body">
+                                            <input type="text" class="form-control" placeholder="Paypal email"
+                                                style="width:350px ;">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </div>
                         </div>
-                        <div>
+                    </div>
+                </table>
+                <div class="card p-3 mb-2">
+                    <div>
+                        <table>
                             <tr>
-                      
-                       <td><div class="card-body">
-                            <input type="text" class="form-control" placeholder="Paypal email"style="width:350px ;">
-                          </div></td>
+                                <td> <span>Carte de crédit</span></td>
+                                <td>
+                                    <div class="icons" style="margin-left:20vh;">
+                                        <img src="https://i.imgur.com/2ISgYja.png" width="30">
+                                        <img src="https://i.imgur.com/W1vtnOV.png" width="30">
+                                        <img src="https://i.imgur.com/35tC99g.png" width="30">
+                                        <img src="https://i.imgur.com/2ISgYja.png" width="30">
+                                    </div>
+                                </td>
                             </tr>
-                        </div>
-                </div>
-            </div>
-            </table>
-            <div class="card p-3 mb-2">
-                <div>
-    <table>
-                        <tr><td>  <span>Carte de crédit</span></td>
-                         <td> <div class="icons" style="margin-left:20vh;">
-                            <img src="https://i.imgur.com/2ISgYja.png" width="30">
-                            <img src="https://i.imgur.com/W1vtnOV.png" width="30">
-                            <img src="https://i.imgur.com/35tC99g.png" width="30">
-                            <img src="https://i.imgur.com/2ISgYja.png" width="30">
-                          </div></td></tr>
-                         </table>   
-                        </div>
-                  
-                    
-                      <div class="card-body payment-card-body">
-                  
+                        </table>
+                    </div>
+
+
+                    <div class="card-body payment-card-body">
+
                         <span class="font-weight-normal card-text">Card Number</span>
                         <div class="input">
-      
-                          <i class="fa fa-credit-card"></i>
-                          <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
-                          
-                        </div> 
-      
-                        <div class="row mt-3 mb-3">
-      
-                          <div class="col-md-6">
-      
-                            <span class="font-weight-normal card-text">Expiry Date</span>
-                            <div class="input">
-      
-                              <i class="fa fa-calendar"></i>
-                              <input type="text" class="form-control" placeholder="MM/YY">
-                              
-                            </div> 
-                            
-                          </div>
-      
-      
-                          <div class="col-md-6">
-      
-                            <span class="font-weight-normal card-text">CVC/CVV</span>
-                            <div class="input">
-      
-                              <i class="fa fa-lock"></i>
-                              <input type="text" class="form-control" placeholder="000">
-                              
-                            </div> 
-                            
-                          </div>
-                          
-      
+
+                            <i class="fa fa-credit-card"></i>
+                            <input type="text" class="form-control" placeholder="0000 0000 0000 0000">
+
                         </div>
-      
-                        <span class="text-muted certificate-text"><i class="fa fa-lock"></i> Your transaction is secured with ssl certificate</span>
-                       
-                      </div>
+
+                        <div class="row mt-3 mb-3">
+
+                            <div class="col-md-6">
+
+                                <span class="font-weight-normal card-text">Expiry Date</span>
+                                <div class="input">
+
+                                    <i class="fa fa-calendar"></i>
+                                    <input type="text" class="form-control" placeholder="MM/YY">
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <span class="font-weight-normal card-text">CVC/CVV</span>
+                                <div class="input">
+
+                                    <i class="fa fa-lock"></i>
+                                    <input type="text" class="form-control" placeholder="000">
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <span class="text-muted certificate-text"><i class="fa fa-lock"></i> Your transaction is secured
+                            with ssl certificate</span>
+
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        Payer ma commande
+                    </button>
                 </div>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Votre commande a bien était prise en compte !</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <div class="col-lg-8">
+                                    <p class="pb-2 fw-bold">Reacapitulatif de la commande : </p>
+                                    <div class="card">
+                                        <div>
+                                            <div class="table-responsive px-md-4 px-2 pt-3">
+                                                <table class="table table-borderless">
+                                                    <tbody>
+                                                        <tr class="border-bottom" *ngFor="let item of finalPanier">
+                                                            <td>
+                                                                <div class="d-flex align-items-center">
+                                                                    <div><img src="{{item.image}}" alt=""
+                                                                            style="width:50%;"></div>
+                                                                    <div
+                                                                        class="ps-3 d-flex flex-column justify-content">
+                                                                        <p class="fw-bold">{{ item.albumName }}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex">
+                                                                    <p class="pe-3"><span class="red">{{ item.prix
+                                                                            }}€</span></p>
+                                                                    <p class="text-muted text-decoration-line-through">
+                                                                        {{getPrix(item)}}€</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td>Total</td>
+                                            <td>{{ calculerPrixTotal(finalPanier) }}€</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
-          
+
         </div>
     </div>
+
+
+
+
 </body>
+
 </html>
