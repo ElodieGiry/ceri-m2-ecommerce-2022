@@ -17,19 +17,25 @@ connection = mariadb.connect(user=USER, password=PASSWORD, database=DBNAME, host
 # connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 cursorDatabase = connection.cursor()
 
-def creationCommande(date,montant,etat,emailClient,telephoneClient,adresse,cp,ville,pays):
+def creationCommande(date,montant,emailClient,telephoneClient,adresse,cp,ville,pays):
 
     query=f'SELECT idClient FROM `client` WHERE emailClient = \'{emailClient}\'' #On récupère l'id du client
     cursorDatabase.execute(query) #On execute la requête
     for row in cursorDatabase:
         idClient=row[0]
 
-    query=f'INSERT INTO `commande`(`dateCommande`, `montantCommande`, `etatCommande`, `idClient`, `telephoneClient`, `adresseLivraison`,  `cpLivraison`, `villeLivraison`, `paysLivraison`) VALUES (\'{date}\',{montant},\'{etat}\',\'{idClient}\',\'{telephoneClient}\',\'{adresse}\',\'{cp}\',\'{ville}\',\'{pays}\')' #On crée la commande
+    query=f'INSERT INTO `commande`(`dateCommande`, `montantCommande`, `etatCommande`, `idClient`, `telephoneClient`, `adresseLivraison`,  `cpLivraison`, `villeLivraison`, `paysLivraison`) VALUES (\'{date}\',{montant},En préparation,\'{idClient}\',\'{telephoneClient}\',\'{adresse}\',\'{cp}\',\'{ville}\',\'{pays}\')' #On crée la commande
     cursorDatabase.execute(query) #On execute la requête
     connection.commit() #On commit la requête
 
 
-def creationDetailCommande(idCommande,idAlbum,quantite):
+def creationDetailCommande(idAlbum,quantite):
+    query1=f'SELECT MAX(idCommande) FROM `commande`' #On récupère l'id de la commande
+    cursorDatabase.execute(query1) #On execute la requête
+    for row in cursorDatabase:
+        idCommande=row[0]
+    print(idCommande)
+
     query=f'INSERT INTO `detailscommande`(`idCommande`, `idAlbum`, `quantite`) VALUES ({idCommande},{idAlbum},{quantite})'
     cursorDatabase.execute(query)
     connection.commit()

@@ -118,6 +118,15 @@ def getAlbumPrice(nomArtiste, nomAlbum):
     cursorDatabase.close()
     return prixAlbum
 
+def getAlbumId(nomArtiste, nomAlbum):
+    idAlbum=""
+    cursorDatabase = connection.cursor()
+    query=f'SELECT idAlbum FROM album NATURAL JOIN artiste WHERE LOWER(nomArtiste) = LOWER(\'{nomArtiste}\') AND LOWER(nomAlbum) = LOWER(\'{nomAlbum}\')'
+    cursorDatabase.execute(query)
+    for row in cursorDatabase:
+        idAlbum=row[0]
+    cursorDatabase.close()
+    return idAlbum
 
 def panier(gestionPanier, nomArtiste, nomAlbum, quantite):
     if gestionPanier and nomArtiste and nomAlbum and quantite:
@@ -164,7 +173,7 @@ app.add_middleware(
 )
 
 @app.get("/")
-def read_root(gestion: str = None,nomArtiste: str = None, nomAlbum: str = None, quantite: int = None):
+def read_root():
     return {"Item": getEverything()}
 
 # route en post pour se connecter
@@ -186,6 +195,12 @@ def read_item():
 def read_item(email : str):
     print("---------------------------------------------------------------")
     return {"Email": email, 'Commande': commande.verificationCommande(email)}
+
+@app.get("/testCreaDetailsCommande")
+def read_item(idAlbum: str,quantite:str):
+    print("---------------------------------------------------------------")
+    return {"DetailsCommande": commande.creationDetailCommande(idAlbum,quantite)}
+
 
 @app.get("/admin")
 def read_item(idCommande: int = None, etat: str = None):
@@ -222,4 +237,4 @@ def read_item(nom_artiste: str):
 @app.get("/{nom_artiste}/{nom_album}")
 def read_item(nom_artiste: str, nom_album: str):
     print("---------------------------------------------------------------")
-    return {"Artiste": nom_artiste, 'Musiques': getMusicsByArtist(nom_artiste,nom_album), 'Image': getAlbumImage(nom_artiste,nom_album), 'Prix': getAlbumPrice(nom_artiste,nom_album)}  
+    return {"Artiste": nom_artiste, 'Musiques': getMusicsByArtist(nom_artiste,nom_album), 'Image': getAlbumImage(nom_artiste,nom_album), 'Prix': getAlbumPrice(nom_artiste,nom_album), 'Id': getAlbumId(nom_artiste,nom_album)}  
