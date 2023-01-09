@@ -3,13 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 import mariadb
 import identifiantsbdd
 import connexion
-
+import admin
+import commande
 from enum import Enum
 from pydantic import BaseModel
 
-connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
-cursorDatabase = connection.cursor()
+import os
+from os.path import  join, dirname
+from dotenv import load_dotenv
 
+connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
+cursorDatabase = connection.cursor() 
 
 query=f'SELECT * FROM `album`'
 cursorDatabase.execute(query)
@@ -128,8 +132,7 @@ class ItemInscription(BaseModel):
 app = FastAPI()
 
 origins = [
-    "http://localhost:4200",
-    "localhost:4200"
+    "https://whitehorse-frontend-mwjszocsqa-ew.a.run.app"
 ]
 
 
@@ -170,6 +173,33 @@ def read_item():
 def read_item(email : str):
     print("---------------------------------------------------------------")
     return {"Email": email, 'Commande': commande.verificationCommande(email)}
+
+
+@app.get("/admin")
+def read_item(idCommande: int = None, etat: str = None):
+    print("---------------------------------------------------------------")
+    if idCommande == None or etat == None:
+        return {"Commandes": admin.recupererCommandes()}
+    return {"Commande modifiée ": admin.modifierCommande(idCommande, etat),"Commandes": admin.recupererCommandes()}
+
+@app.get("/ajouter")
+def read_item(a_ajouter: str = None, nomNouvelArtiste: str = None, nomArtiste: str = None, prixAlbum: float = None, quantite: int = None, anneeAlbum: str = None, typeAlbum: str = None, nomAlbum: str = None, imageAlbum: str = None, idAlbumChanson: int = None, nomChanson: str = None ):
+    print("---------------------------------------------------------------")
+    if a_ajouter == "Artiste":
+        if nomNouvelArtiste != None:
+            return {"Message": admin.ajouterArtiste(nomNouvelArtiste)}
+        return {"Message": "Nom de l'artiste non renseigné"}
+    elif a_ajouter == "Album":
+        if nomArtiste != None and prixAlbum != None and quantite != None and anneeAlbum != None and typeAlbum != None and nomAlbum != None and imageAlbum != None:
+            return {"Message": admin.ajouterAlbum(nomArtiste, prixAlbum, quantite, anneeAlbum, typeAlbum, nomAlbum, imageAlbum)}
+        return {"Message": "Tous les champs ne sont pas renseignés"}
+    elif a_ajouter == "Chanson":
+        if idAlbumChanson != None and nomChanson != None:
+            return {"Message": admin.ajouterChanson(idAlbumChanson, nomChanson)}
+        return {"Message": "Tous les champs ne sont pas renseignés"}
+    else : 
+        return {"Message": "Aucune action n'a été renseignée"}
+
 
 @app.get("/{nom_artiste}")
 def read_item(nom_artiste: str):
