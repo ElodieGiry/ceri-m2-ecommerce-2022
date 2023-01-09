@@ -1,12 +1,9 @@
 import mariadb
 import numpy as np
-import os
-from os.path import  join, dirname
-from dotenv import load_dotenv
 
 import identifiantsbdd
-connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
-cursorDatabase = connection.cursor()
+import database
+cursorDatabase = database.connection.cursor()
 
 def creationCommande(date,montant,emailClient,telephoneClient,adresse,cp,ville,pays):
 
@@ -17,7 +14,7 @@ def creationCommande(date,montant,emailClient,telephoneClient,adresse,cp,ville,p
 
     query=f'INSERT INTO `commande`(`dateCommande`, `montantCommande`, `etatCommande`, `idClient`, `telephoneClient`, `adresseLivraison`,  `cpLivraison`, `villeLivraison`, `paysLivraison`) VALUES (\'{date}\',{montant},En préparation,\'{idClient}\',\'{telephoneClient}\',\'{adresse}\',\'{cp}\',\'{ville}\',\'{pays}\')' #On crée la commande
     cursorDatabase.execute(query) #On execute la requête
-    connection.commit() #On commit la requête
+    database.connection.commit() #On commit la requête
 
 
 def creationDetailCommande(idAlbum,quantite):
@@ -29,7 +26,7 @@ def creationDetailCommande(idAlbum,quantite):
 
     query=f'INSERT INTO `detailscommande`(`idCommande`, `idAlbum`, `quantite`) VALUES ({idCommande},{idAlbum},{quantite})'
     cursorDatabase.execute(query)
-    connection.commit()
+    database.connection.commit()
 
 def verificationCommande(emailClient):
     Commande=[]
@@ -47,7 +44,7 @@ def verificationCommande(emailClient):
         # cursorDatabase.close()
         Commandes=np.zeros((int(len(Commande)/5),5), dtype=object)
         for i in range(0,int(len(Commande)/5)):
-            for j in range(0,int(len(Commande)/(len(result)+2))+3):
+            for j in range(0,int(len(Commande)/(len(result)+2))+2):
                 Commandes[i,j]=Commande[(i*5)+j]
         return Commandes.tolist()
 
