@@ -1,6 +1,5 @@
 import mariadb
 import numpy as np
-import identifiantsbdd
 import os
 from os.path import  join, dirname
 from dotenv import load_dotenv

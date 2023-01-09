@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Form, Query,APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 import mariadb
-import identifiantsbdd
 import connexion
 import commande
 from pydantic import BaseModel
@@ -159,8 +158,7 @@ app = FastAPI()
 router = APIRouter()
 app.include_router(router)
 origins = [
-    "http://localhost:4200",
-    "localhost:4200"
+    "https://whitehorse-frontend-mwjszocsqa-ew.a.run.app"
 ]
 
 
