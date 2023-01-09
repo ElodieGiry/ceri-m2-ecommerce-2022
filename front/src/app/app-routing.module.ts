@@ -8,6 +8,7 @@ import { DetailsComponent } from 'src/app/details/details.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { InscriptionComponent } from './inscription/inscription.component';
 import { PanierComponent } from './panier/panier.component';
+import { AdminComponent } from './admin/admin.component';
 const routes: Routes = [
   {path: "" , component : BodyComponent},
   {path: 'header' , component : HeaderComponent},
@@ -17,7 +18,7 @@ const routes: Routes = [
   {path: 'connexion' , component : ConnexionComponent},
   {path: 'inscription' , component : InscriptionComponent},
   {path: 'panier' , component : PanierComponent},
-
+  {path: 'admin' , component : AdminComponent},
 
 ];
 

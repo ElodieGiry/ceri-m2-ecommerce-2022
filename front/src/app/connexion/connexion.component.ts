@@ -16,6 +16,7 @@ export class ConnexionComponent implements OnInit {
   password:any;
   connec:any
   value:any;
+  emailAdmin:any;  
  
   private logged: boolean = false;
  
@@ -51,7 +52,17 @@ export class ConnexionComponent implements OnInit {
              
           
         }
- 
+
+        
+        if(formConnex.form.value.email=="jcvinyl@gmail.com"){
+          console.log("vous etes connecté en tant que admin")
+          this.emailAdmin=1
+          this.logged=true;
+          this.connec="1";
+          this.router.navigate(['/']);
+          this.refreshPage();
+          }
+        
         else{    // CONNEXION OK
           console.log("Connexion réussi");  
           this.logged=true;
@@ -71,6 +82,7 @@ export class ConnexionComponent implements OnInit {
         localStorage.setItem("time",this.email);   // stocke la date dans le localStorage
 			  localStorage.setItem("date",new Date().toDateString());
 			  localStorage.setItem("connecte",this.connec);
+        localStorage.setItem("admin",this.emailAdmin);  
         console.log(localStorage.getItem("connecte"));
         this.value=(localStorage.getItem("connecte"));
        

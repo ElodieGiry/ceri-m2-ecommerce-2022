@@ -29,7 +29,7 @@
     </div>
 <!--LOGO-->
     <img class="img-responsive" src="../assets/logoban.png" opacity="100%" width="100%" height="auto" />
-    <ng-container *ngIf="value == 1; else otherContent">
+    <ng-container *ngIf="value==null; else otherContent">
     
       <nav class="navbar navbar-expand-lg navbar-light sticky-top ">
           <div class="container-fluid pe-lg-2 p-0">
@@ -159,8 +159,10 @@
                                 </a> 
                                   <ul class="dropdown-menu" >
                                     
-                                    <li><a class="dropdown-item" routerLink="/deconnexion">Se deconnecter</a></li>
-                                    
+                                    <li><a class="dropdown-item" routerLink="/">Se deconnecter</a></li>
+                                    <div *ngIf="admin==1">
+                                    <li><a class="dropdown-item" routerLink="/">Gérer</a></li>
+                                    </div>
                                   </ul>
            </li>
                                 

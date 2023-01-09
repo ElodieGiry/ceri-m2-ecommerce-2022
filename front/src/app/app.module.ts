@@ -11,7 +11,8 @@ import { DetailsComponent } from './details/details.component';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { InscriptionComponent } from './inscription/inscription.component';
 import { PanierComponent } from './panier/panier.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminComponent } from './admin/admin.component'
 
 
 
@@ -25,6 +26,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
     ConnexionComponent,
     InscriptionComponent,
     PanierComponent,
+    AdminComponent,
    
     
   ],

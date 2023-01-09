@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 
 export class HeaderComponent implements OnInit {
   value:any;
+  admin:any;
   
  
  
@@ -17,6 +18,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.value = localStorage.getItem('connecte');
+    this.admin = localStorage.getItem('admin')
+  }
+
+
+  deco(){
+    this.value==null
+    
+
   }
 
 }

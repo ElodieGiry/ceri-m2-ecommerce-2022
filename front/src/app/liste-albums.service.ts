@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ListeAlbumsService {
-  BACKEND_URL:string='http://localhost:8000'
-
+  //backend:string='http://localhost:8000'
+  backend=environment.BACKEND_URL
   listeProd: { albumName: string, artisteName: string,prix:string,image:string,quantite:number }[] = [];
  
 
@@ -15,7 +16,7 @@ export class ListeAlbumsService {
 
   getEverything() : Observable<any>{
     console.log("test service");
-	  return this.http.get(this.BACKEND_URL,{withCredentials : true});
+	  return this.http.get(this.backend,{withCredentials : true});
   }
 
   getMusicsByArtist(nom_Artiste:string,nom_Album:string): Observable<any> {
