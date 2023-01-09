@@ -1,9 +1,7 @@
 import mariadb
 import numpy as np
-
-import identifiantsbdd
-# connection = mariadb.connect(user=identifiantsbdd.username, password=identifiantsbdd.password, database=identifiantsbdd.database, host=identifiantsbdd.host, port=identifiantsbdd.port)
 import database
+
 cursorDatabase = database.connection.cursor()
 
 def recupererCommandes():
