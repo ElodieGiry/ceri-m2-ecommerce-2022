@@ -40,10 +40,9 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center"> <span
-                                                    class="pe-3 text-muted">Quantité <td>{{ item.quantite }}</td></span> <span class="pe-3"> <input
-                                                        class="ps-2" type="number"></span>
+                                                    class="pe-3 text-muted">Quantité <td>{{ item.quantite }}</td></span> <span class="pe-3"> </span>
                                                 <div class="fa fa-trash" type="button"
-                                                    (click)="deleteItem(item, $event)"></div>
+                                                (click)="decreaseQuantity(item, $event)"></div>
                                             </div>
                                         </td>
                                     </tr>
@@ -259,15 +258,16 @@
                         Payer ma commande
                     </button>
                 </div>
-
+            <ng-container>
                 <!-- The Modal -->
+                <div *ngIf="connecte==1; else otherContent">
                 <div class="modal" id="myModal">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <!-- Modal Header -->
                             <div class="modal-header">
                                 <h4 class="modal-title">Votre commande a bien était prise en compte !</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                <button routerLink="/" type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <!-- Modal body -->
                             <div class="modal-body">
@@ -315,18 +315,37 @@
                             </div>
                             <!-- Modal footer -->
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                <button routerLink="/" type="button" class="btn btn-success" data-bs-dismiss="modal">Retour à la page d'accueil</button>
                             </div>
                         </div>
 
                     </div>
                 </div>
+                </div>
+            </ng-container>
+
+                <ng-template #otherContent>
+                    <div class="modal" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Vous devez vous connecter pour valider votre commande !</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
 
 
+
+                </ng-template>
+
+                </div>
             </div>
 
         </div>
-    </div>
+   
 
 
 

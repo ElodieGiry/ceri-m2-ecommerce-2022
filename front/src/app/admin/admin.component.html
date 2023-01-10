@@ -1,1 +1,56 @@
-<p>admin works!</p>
+
+
+<button (click)="afficheCommande()">Voir les commandes en cours</button>
+  <table class="table table-striped">
+    <thead>
+      <th class="text-center">Dates</th>
+      <th class="text-center">Etat</th>
+      <th class="text-center">ID client</th>
+      <th class="text-center">Prix</th>
+      <th class="text-center">Produits</th>
+    </thead>
+    <tbody>
+    <tr *ngFor="let commande of commandes.Commandes;let i=index" (click)="idCommande = commande[0]">
+        <td class="text-center">{{commande[1]}} 
+        </td>
+        <td class="text-center">{{commande[2]}}</td> 
+        <td class="text-center">{{commande[3]}}</td> 
+        <td class="text-center">{{commande[4]}}</td> 
+        <td class="text-center">{{commande[5]}}</td>
+        <td>
+          <label for="modif{{i}}">Changer l'état:</label>
+          <input type="text" id="modif{{i}}" name="modif{{i}}" [(ngModel)]="etatCommande">
+        </td>
+        <td class="text-center">
+          <button (click)="modifEtat()">Modifier</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+<!--  <p>Ajouter</p>
+ 
+
+   <form>
+      <label for="option">Quel type d'objet voulez vous ajouter:</label>
+      <input type="text" id="option" name="option" [(ngModel)]="option">
+
+      <input type="text" id="artiste" name="artiste" [(ngModel)]="newArtiste">
+      <button (click)="ajouterArtiste()" data-bs-toggle="modal" data-bs-target="#myModal">Ajouter un artiste</button>
+   </form>
+
+ 
+   
+ 
+   <div class="modal" id="myModal">
+     <div class="modal-dialog">
+         <div class="modal-content">
+          
+             <div class="modal-header">
+                 <h4 class="modal-title">Artiste ajouté !</h4>
+                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+             </div>
+           </div>
+       </div>
+    </div>
+ -->

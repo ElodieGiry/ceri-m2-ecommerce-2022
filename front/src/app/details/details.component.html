@@ -33,7 +33,7 @@
                         <br>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent ">
                             <div class="text-center "><button (click)="addToCart()"
-                                    class="btn btn-outline-dark mt-auto ">Ajouter au panier</button>
+                                    class="btn btn-outline-dark mt-auto " data-bs-toggle="modal" data-bs-target="#myModal">Ajouter au panier</button>
                             </div>
                         </div>
                     </div>
@@ -42,6 +42,21 @@
         </div>
     </div>
 
+      <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Votre article a bien été ajouté !</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+              
+                        </div>
+                    </div>
+                    
+                </div>
+       
 
     
 </body>

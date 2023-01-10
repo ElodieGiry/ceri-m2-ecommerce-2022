@@ -18,7 +18,7 @@ export class ConnexionComponent implements OnInit {
   value:any;
   emailAdmin:any;  
  
-  private logged: boolean = false;
+  logged: boolean = false;
  
  // email:string;
   //password:string;
@@ -48,7 +48,7 @@ export class ConnexionComponent implements OnInit {
         if(data[0]=="Erreur de connexion, le mail ou le mot de passe est incorrect"){   // ECHEC DE CONNEXION
           console.log("Erreur de connexion");
           this.logged=false;  
-          this.connec=0;
+          
              
           
         }
@@ -58,17 +58,22 @@ export class ConnexionComponent implements OnInit {
           console.log("vous etes connecté en tant que admin")
           this.emailAdmin=1
           this.logged=true;
-          this.connec="1";
+          this.connec=1;
+          this.connect.setIsConnected(true);
           this.router.navigate(['/']);
-          this.refreshPage();
+          
+        
+          
+          
           }
         
         else{    // CONNEXION OK
           console.log("Connexion réussi");  
           this.logged=true;
-          this.connec="1";
+          this.connec=1;
+          this.connect.setIsConnected(true);
           this.router.navigate(['/']);
-          this.refreshPage();
+          
           
         
           

@@ -17,10 +17,17 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ConnexionService {
-
+  private isConnected = false;
   constructor(private http :HttpClient) { }
   
+  setIsConnected(isConnected: boolean) {
+    this.isConnected=isConnected;
+  }
 
+  getIsConnected() {
+    return this.isConnected;
+    }
+  
 
   login(emaill:string,passwordd:string) : Observable<any>{
     console.log("test service connexion");
