@@ -12,6 +12,7 @@ import {Router} from '@angular/router';
 export class InscriptionComponent implements OnInit {
 
   inscrip:ConnexionService;
+  connecte:any;
 
   constructor(inscription:ConnexionService,private http:HttpClient,private router:Router) {
     this.inscrip=inscription;
@@ -30,11 +31,19 @@ export class InscriptionComponent implements OnInit {
     this.inscrip.inscription(formConnex.form.value.nom,formConnex.form.value.prenom,
       formConnex.form.value.email,formConnex.form.value.password,formConnex.form.value.telephone,
       formConnex.form.value.adresse,formConnex.form.value.code,formConnex.form.value.ville,formConnex.form.value.pays )
-       
+      
     console.log("inscription ok") 
+    
     
   
 
+  }
+
+  inscriptionValide(){
+    this.router.navigate(['/']);
+    this.connecte=1
+    localStorage.setItem("connecte",this.connecte);
+    
   }
        
           

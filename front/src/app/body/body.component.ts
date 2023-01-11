@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ListeAlbumsService } from '../liste-albums.service';
+import {ConnexionService} from '../connexion.service';
 
 
 @Component({
@@ -10,18 +11,26 @@ import { ListeAlbumsService } from '../liste-albums.service';
 export class BodyComponent implements OnInit {
   listeAlb:any;
   liste : ListeAlbumsService
+  connect:ConnexionService;
+  value=(localStorage.getItem("connecte"));
  
   
   
 
-  constructor(liste:ListeAlbumsService) {
+  constructor(liste:ListeAlbumsService,connect:ConnexionService) {
     this.liste=liste;
+    this.connect=connect;
 
    }
 
    ngOnInit(): void {
 	  this.afficheListeAlbums();
-  }
+
+    if(this.value=="1"){
+      this.connect.setIsConnected(true)
+    }
+   }
+  
   
   afficheListeAlbums(){
     console.log("test fonction afficheListeAlb");

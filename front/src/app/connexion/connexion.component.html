@@ -57,8 +57,8 @@
             </div>
   
             <div class="text-center text-lg-start mt-4 pt-2">
-              <button type="submit" class="btn btn-success btn-lg"
-                style="padding-left: 2.5rem; padding-right: 2.5rem;" [disabled]="!formConnex.form.valid">Connexion</button>
+              <button  type="submit" class="btn btn-success btn-lg"
+                style="padding-left: 2.5rem; padding-right: 2.5rem;" [disabled]="!formConnex.form.valid" >Connexion</button>
               <p class="small fw-bold mt-2 pt-1 mb-0">Pas de compte ? <a routerLink="/inscription"
                   class="link-danger">Inscrivez-vous</a></p>
             </div>
@@ -68,4 +68,19 @@
       </div>
     </div>
 
-  </section>
+<div *ngIf="connec==1">
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Ravie de vous revoir, vous êtes bien connecté !</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+          </div>
+      </div>
+   </div>
+ </div>
+
+        </section>
+

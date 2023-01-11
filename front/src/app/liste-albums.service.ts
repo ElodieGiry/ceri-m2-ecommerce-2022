@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders,HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
+
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -8,7 +10,7 @@ import { environment } from '../environments/environment';
 })
 export class ListeAlbumsService {
   //backend:string='http://localhost:8000'
-  backend=environment.BACKEND_URL
+  //backend=environment.BACKEND_URL
   listeProd: { albumName: string, artisteName: string,prix:string,image:string,quantite:number }[] = [];
  
 
@@ -16,7 +18,7 @@ export class ListeAlbumsService {
 
   getEverything() : Observable<any>{
     console.log("test service");
-	  return this.http.get(this.backend,{withCredentials : true});
+	  return this.http.get("http://localhost:8000/",{withCredentials : true});
   }
 
   getMusicsByArtist(nom_Artiste:string,nom_Album:string): Observable<any> {
@@ -42,7 +44,20 @@ export class ListeAlbumsService {
     }
   }
   
-  
+  afficheCommande() : Observable<any>{   // affiche commande en cours mode admin
+    console.log("test service commande");
+	  return this.http.get("http://localhost:8000/admin",{withCredentials : true});
 
   
+}
+
+modifCommande(params: HttpParams){
+  return this.http.get(`http://localhost:8000/admin`, { params });
+}
+
+
+ajouterArtiste(params:HttpParams){
+  console.log("test service ajout artiste")
+  return this.http.get('http://localhost:8000/ajouter',{params});
+}
 }

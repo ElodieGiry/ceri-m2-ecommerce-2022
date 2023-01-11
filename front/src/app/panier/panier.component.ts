@@ -14,6 +14,7 @@ export class PanierComponent implements OnInit {
 
   liste: ListeAlbumsService
   finalPanier;
+  connecte:any;
 
   constructor(liste: ListeAlbumsService, private http: HttpClient, private router: Router, private route: ActivatedRoute) {
     this.liste = liste;
@@ -25,7 +26,8 @@ export class PanierComponent implements OnInit {
     console.log("panier", this.finalPanier)
   }
   ngOnInit(): void {
-
+      this.connecte=localStorage.getItem('connecte')
+      
   }
   deleteItem(item: any, event: Event) {
     event.preventDefault();
@@ -42,8 +44,9 @@ export class PanierComponent implements OnInit {
   calculerPrixTotal(panier: any[]): number {
     let total = 0;
     panier.forEach(item => {
-      total += parseInt(item.prix, 10);
+      total += parseInt(item.prix, 10)*item.quantite;
     });
+   
     return total;
   }
   calculerPrixLivraison(prixTotal: any): number {
@@ -69,6 +72,16 @@ export class PanierComponent implements OnInit {
 
   calculerPrixTotalCommande(panier: any[]): number {
     return this.calculerPrixTotal(panier) + this.calculerPrixLivraison(this.calculerPrixTotal(panier));
+  }
+
+ decreaseQuantity(item: any, event: Event) {
+    event.preventDefault();
+    if (item.quantite > 1) {
+        item.quantite--;
+        localStorage.setItem('listeProd', JSON.stringify(this.finalPanier));
+    } else {
+        this.deleteItem(item, event);
+    }
   }
 
 
