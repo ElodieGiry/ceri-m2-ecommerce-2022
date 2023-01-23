@@ -3,6 +3,7 @@ import numpy as np
 import database
 cursorDatabase = database.connection.cursor()
 
+# SNIF
 def recupererCommandes():
     query=f'SELECT idCommande, dateCommande, etatCommande, emailClient, montantCommande, GROUP_CONCAT(nomAlbum) FROM `commande` NATURAL JOIN `detailscommande` NATURAL JOIN `album` NATURAL JOIN `client` GROUP BY idCommande ORDER BY idCommande DESC'
     cursorDatabase.execute(query)
